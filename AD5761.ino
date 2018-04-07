@@ -59,8 +59,12 @@ void setup()
 
 void printRegisterData() {
   Serial.print(SPI_Buff[0], HEX);
+    Serial.print(" ");
+
   Serial.print(SPI_Buff[1], HEX);
-  Serial.println(SPI_Buff[2], HEX);
+    Serial.print(" ");
+
+  Serial.println(I_Buff[2], HEX);
 }
 
 void loop()
