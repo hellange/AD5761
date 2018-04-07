@@ -53,27 +53,29 @@ void setup()
   ad5761r_read(CMD_RD_CTRL_REG);
   ad5761r_read(CMD_RD_CTRL_REG);
 
-  Serial.println("Readback from control register before setting:");
+  Serial.println("Readback from control register after setting:");
   printRegisterData();
 
 }
 
 void printRegisterData() {
+  Serial.print("CMD:");
   Serial.print(SPI_Buff[0], HEX);
-    Serial.print(" ");
-
+  
+  Serial.print(" DATA:");
   Serial.print(SPI_Buff[1], HEX);
-    Serial.print(" ");
+  Serial.print(" ");
 
-  Serial.println(SPI_Buff[2], HEX);
+  Serial.println(SPI_Buff[2], HEX)
+  ;
 }
 
 void loop()
 {
-  ad5761r_write(CMD_UPDATE_DAC_REG, 0);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0);
   delay(100);  // This will make the display update at 100Hz.*/
   
-  ad5761r_write(CMD_UPDATE_DAC_REG, 0xffff);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xffff);
   delay(100);  // This will make the display update at 100Hz.*/
 }
 
