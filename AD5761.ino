@@ -74,7 +74,6 @@ void loop()
   delay(100);  // This will make the display update at 100Hz.*/
   
   ad5761r_write(CMD_UPDATE_DAC_REG, 0xffff);
-  printRegisterData();
   delay(100);  // This will make the display update at 100Hz.*/
 }
 
