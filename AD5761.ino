@@ -47,7 +47,29 @@ void setup()
   printRegisterData();
 
   // write control register
-  ad5761r_write(CMD_WR_CTRL_REG, 0b0000000001101011);
+  // [23:21][20][19:16]   [15:11]  [10:9] 8   7   6   5 [4:3] [2:0]
+  // |      |  |        |          |    |   |   |   |   |    |      |
+  //   X X X  0  0 1 0 0  X X X X X  CV  OVR B2C ETS IRO  PV    RA
+  //
+  //                                 CV  : Clear voltage selection 00=zero, 01=midscale, 10,11=full scale
+  //                                 OVR : 5% overrange 0=5% overrange disabled, 1=5% overrange enabled
+  //                                 B2C : Bipolar range 0=DAC input for bipolar range is straight binary coded
+  //                                                     1=DAC input for bipolar output range is twos complement code
+  //                                 ETS : Thermal shutdown alert 0=does not power down when die temperature exceeds 150degC
+  //                                                              1=powers down when die temperature exceeds 150degC
+  //                                 IRO : Internal reference 0=off, 1=on
+  //                                 PV  : Power up voltage 00=zero scale, 01=midscale, 10,11=full scale
+  //                                 RA  : Output range
+  //                                       000=-10 to +10
+  //                                       001=0 to +10
+  //                                       010=-5 to +5
+  //                                       011=0 to +5
+  //                                       100=-2.5 to +7.5
+  //                                       101=-3 to +3
+  //                                       110=0 to +16
+  //                                       111=0 to +20
+  
+  ad5761r_write(CMD_WR_CTRL_REG, 0b0000000001101000);
 
   // read control register
   ad5761r_read(CMD_RD_CTRL_REG);
@@ -74,12 +96,20 @@ void loop()
 {
 
   
-  ad5761r_write(CMD_WR_TO_INPUT_REG, 0);
-  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0);
+  ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00ff);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x00ff);
   delay(500);  
 
-  ad5761r_write(CMD_WR_TO_INPUT_REG, 0xffff);
-  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xffff);
+  ad5761r_write(CMD_WR_TO_INPUT_REG, 0xff00);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xff00);
+  delay(500);
+
+  ad5761r_write(CMD_WR_TO_INPUT_REG, 0xaa00);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xaa00);
+  delay(500);
+
+  ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00aa);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x00aa);
   delay(500);
 }
 
