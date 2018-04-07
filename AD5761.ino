@@ -36,21 +36,21 @@ void setup()
   SPI.setClockDivider(SPI_CLOCK_DIV64);  // Slow down SPI clock
 
   // software reset
-  ad5761r_readwrite(CMD_SW_FULL_RESET, 0);
+  ad5761r_write(CMD_SW_FULL_RESET, 0);
 
   // read control register
-  ad5761r_readwrite(CMD_RD_CTRL_REG, 0);
-  ad5761r_readwrite(CMD_RD_CTRL_REG, 0);
+  ad5761r_read(CMD_RD_CTRL_REG);
+  ad5761r_read(CMD_RD_CTRL_REG);
 
   Serial.println("Readback from control register before setting:");
   printRegisterData();
 
   // write control register
-  ad5761r_readwrite(CMD_WR_CTRL_REG, 0b0000000001101011);
+  ad5761r_write(CMD_WR_CTRL_REG, 0b0000000001101011);
 
   // read control register
-  ad5761r_readwrite(CMD_RD_CTRL_REG, 0);
-  ad5761r_readwrite(CMD_RD_CTRL_REG, 0);
+  ad5761r_read(CMD_RD_CTRL_REG);
+  ad5761r_read(CMD_RD_CTRL_REG);
 
   Serial.println("Readback from control register before setting:");
   printRegisterData();
@@ -65,18 +65,15 @@ void printRegisterData() {
 
 void loop()
 {
-  //ad5761r_readwrite(CMD_WR_TO_INPUT_REG, 0);
-  ad5761r_readwrite(CMD_UPDATE_DAC_REG, 0);
-  printRegisterData();
+  ad5761r_write(CMD_UPDATE_DAC_REG, 0);
   delay(100);  // This will make the display update at 100Hz.*/
   
-  //ad5761r_readwrite(CMD_WR_TO_INPUT_REG, 0xffff);
-  ad5761r_readwrite(CMD_UPDATE_DAC_REG, 0xffff);
+  ad5761r_write(CMD_UPDATE_DAC_REG, 0xffff);
   printRegisterData();
   delay(100);  // This will make the display update at 100Hz.*/
 }
 
-void ad5761r_readwrite(uint8_t reg_addr_cmd,
+void ad5761r_write(uint8_t reg_addr_cmd,
             uint16_t reg_data)
 {
   uint8_t data[3];
@@ -87,8 +84,17 @@ void ad5761r_readwrite(uint8_t reg_addr_cmd,
   data[2] = (reg_data & 0x00FF) >> 0;
   for (int i=0; i<3; i++)
   {
-    SPI_Buff[i] = SPI.transfer(data);
+    SPI.transfer(data[i]);
   }
+  digitalWrite(ssPin, HIGH);
+}
+
+void ad5761r_read(uint8_t reg_addr_cmd)
+{
+  digitalWrite(ssPin, LOW);
+  SPI_Buff[0] = SPI.transfer(reg_addr_cmd);
+  SPI_Buff[1] = SPI.transfer(0xFF);
+  SPI_Buff[2] = SPI.transfer(0xFF);
   digitalWrite(ssPin, HIGH);
 }
 
