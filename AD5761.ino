@@ -34,7 +34,8 @@ void setup()
   digitalWrite(ssPin, HIGH);  // Set the SS pin HIGH
   SPI.begin();  // Begin SPI hardware
   SPI.setClockDivider(SPI_CLOCK_DIV64);  // Slow down SPI clock
-
+  SPI.setDataMode(SPI_MODE1);
+  
   // software reset
   ad5761r_write(CMD_SW_FULL_RESET, 0);
 
@@ -64,7 +65,7 @@ void printRegisterData() {
   Serial.print(SPI_Buff[1], HEX);
     Serial.print(" ");
 
-  Serial.println(I_Buff[2], HEX);
+  Serial.println(SPI_Buff[2], HEX);
 }
 
 void loop()
@@ -97,8 +98,8 @@ void ad5761r_read(uint8_t reg_addr_cmd)
 {
   digitalWrite(ssPin, LOW);
   SPI_Buff[0] = SPI.transfer(reg_addr_cmd);
-  SPI_Buff[1] = SPI.transfer(0xFF);
-  SPI_Buff[2] = SPI.transfer(0xFF);
+  SPI_Buff[1] = SPI.transfer(0xFF); // dummy
+  SPI_Buff[2] = SPI.transfer(0xFF); // dummy
   digitalWrite(ssPin, HIGH);
 }
 
