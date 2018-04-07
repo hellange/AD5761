@@ -84,6 +84,8 @@ void ad5761r_write(uint8_t reg_addr_cmd,
   uint8_t data[3];
   
   digitalWrite(ssPin, LOW);
+  delay(5);
+
   data[0] = reg_addr_cmd;
   data[1] = (reg_data & 0xFF00) >> 8;
   data[2] = (reg_data & 0x00FF) >> 0;
@@ -91,15 +93,18 @@ void ad5761r_write(uint8_t reg_addr_cmd,
   {
     SPI.transfer(data[i]);
   }
+  delay(5);
   digitalWrite(ssPin, HIGH);
 }
 
 void ad5761r_read(uint8_t reg_addr_cmd)
 {
   digitalWrite(ssPin, LOW);
+  delay(5);
   SPI_Buff[0] = SPI.transfer(reg_addr_cmd);
   SPI_Buff[1] = SPI.transfer(0xFF); // dummy
   SPI_Buff[2] = SPI.transfer(0xFF); // dummy
+  delay(5);
   digitalWrite(ssPin, HIGH);
 }
 
