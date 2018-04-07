@@ -46,8 +46,7 @@ void setup()
   printRegisterData();
 
   // write control register
-  ad5761r_readwrite(CMD_WR_CTRL_REG, 0b000000000110
-  1011);
+  ad5761r_readwrite(CMD_WR_CTRL_REG, 0b0000000001101011);
 
   // read control register
   ad5761r_readwrite(CMD_RD_CTRL_REG, 0);
