@@ -72,11 +72,15 @@ void printRegisterData() {
 
 void loop()
 {
-  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0);
-  delay(100);  // This will make the display update at 100Hz.*/
+
   
+  ad5761r_write(CMD_WR_TO_INPUT_REG, 0);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0);
+  delay(500);  
+
+  ad5761r_write(CMD_WR_TO_INPUT_REG, 0xffff);
   ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xffff);
-  delay(100);  // This will make the display update at 100Hz.*/
+  delay(500);
 }
 
 void ad5761r_write(uint8_t reg_addr_cmd,
