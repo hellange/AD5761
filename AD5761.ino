@@ -34,7 +34,7 @@ void setup()
   digitalWrite(ssPin, HIGH);  // Set the SS pin HIGH
   SPI.begin();  // Begin SPI hardware
   SPI.setClockDivider(SPI_CLOCK_DIV64);  // Slow down SPI clock
-  SPI.setDataMode(SPI_MODE1);
+  SPI.setDataMode(SPI_MODE2);
   
   // software reset
   ad5761r_write(CMD_SW_FULL_RESET, 0);
@@ -96,17 +96,17 @@ void loop()
 {
 
   
-  ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00f0);
-  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x00f0);
+  //ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00f0);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xf000);
   delay(500);  
 
-  ad5761r_write(CMD_WR_TO_INPUT_REG, 0xff00);
-  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xff00);
+  //ad5761r_write(CMD_WR_TO_INPUT_REG, 0xff00);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x0000);
   delay(500);
 
-  ad5761r_write(CMD_WR_TO_INPUT_REG, 0xaa00);
-  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xaa00);
-  delay(500);
+  //ad5761r_write(CMD_WR_TO_INPUT_REG, 0xaa00);
+  //ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xaa00);
+  //delay(100);
 
   //ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00aa);
   //ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x00aa);
