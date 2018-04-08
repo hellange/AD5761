@@ -69,7 +69,7 @@ void setup()
   //                                       110=0 to +16
   //                                       111=0 to +20
   
-  ad5761r_write(CMD_WR_CTRL_REG, 0b0000000001101000);
+  ad5761r_write(CMD_WR_CTRL_REG, 0b0000000001101010);
 
   // read control register
   ad5761r_read(CMD_RD_CTRL_REG);
@@ -96,8 +96,8 @@ void loop()
 {
 
   
-  ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00ff);
-  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x00ff);
+  ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00f0);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x00f0);
   delay(500);  
 
   ad5761r_write(CMD_WR_TO_INPUT_REG, 0xff00);
@@ -108,18 +108,18 @@ void loop()
   ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xaa00);
   delay(500);
 
-  ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00aa);
-  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x00aa);
-  delay(500);
+  //ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00aa);
+  //ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x00aa);
+  //delay(500);
 }
 
 void ad5761r_write(uint8_t reg_addr_cmd,
             uint16_t reg_data)
 {
   uint8_t data[3];
-  
+  delay(1);
   digitalWrite(ssPin, LOW);
-  delay(5);
+  delay(1);
 
   data[0] = reg_addr_cmd;
   data[1] = (reg_data & 0xFF00) >> 8;
@@ -128,18 +128,20 @@ void ad5761r_write(uint8_t reg_addr_cmd,
   {
     SPI.transfer(data[i]);
   }
-  delay(5);
+  delay(1);
   digitalWrite(ssPin, HIGH);
+  delay(1);
 }
 
 void ad5761r_read(uint8_t reg_addr_cmd)
 {
+  delay(1);
   digitalWrite(ssPin, LOW);
-  delay(5);
+  delay(1);
   SPI_Buff[0] = SPI.transfer(reg_addr_cmd);
   SPI_Buff[1] = SPI.transfer(0xFF); // dummy
   SPI_Buff[2] = SPI.transfer(0xFF); // dummy
-  delay(5);
+  delay(1);
   digitalWrite(ssPin, HIGH);
 }
 
