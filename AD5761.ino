@@ -69,7 +69,7 @@ void setup()
   //                                       110=0 to +16
   //                                       111=0 to +20
   
-  ad5761r_write(CMD_WR_CTRL_REG, 0b0000000001101010);
+  ad5761r_write(CMD_WR_CTRL_REG, 0b0000000101000);
 
   // read control register
   ad5761r_read(CMD_RD_CTRL_REG);
@@ -77,6 +77,8 @@ void setup()
 
   Serial.println("Readback from control register after setting:");
   printRegisterData();
+  
+ 
 
 }
 
@@ -95,22 +97,21 @@ void printRegisterData() {
 void loop()
 {
 
-  
-  //ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00f0);
-  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xf000);
-  delay(500);  
-
-  //ad5761r_write(CMD_WR_TO_INPUT_REG, 0xff00);
   ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x0000);
-  delay(500);
+  delay(100);  
 
-  //ad5761r_write(CMD_WR_TO_INPUT_REG, 0xaa00);
-  //ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xaa00);
-  //delay(100);
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x4000);
+  delay(100);
+  
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x8000);
+  delay(100);
+  
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xb000);
+  delay(100);
+  
+  ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0xffff);
+  delay(100);
 
-  //ad5761r_write(CMD_WR_TO_INPUT_REG, 0x00aa);
-  //ad5761r_write(CMD_WR_UPDATE_DAC_REG, 0x00aa);
-  //delay(500);
 }
 
 void ad5761r_write(uint8_t reg_addr_cmd,
